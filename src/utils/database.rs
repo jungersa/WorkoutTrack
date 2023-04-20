@@ -1,5 +1,5 @@
-use sqlx::{migrate::MigrateDatabase, Sqlite, SqlitePool};
 use crate::prelude::*;
+use sqlx::{migrate::MigrateDatabase, Sqlite, SqlitePool};
 
 /// Create the database if it doesn't exist
 ///
@@ -19,11 +19,13 @@ async fn create_database(db_url: &str) -> Result<()> {
         println!("Creating database {}", db_url);
         Sqlite::create_database(db_url)
             .await
-            .or_else(|error|  Err(Error::DatabaseCreationError { url: db_url.to_string(), source: error }))?;
+            .map_err(|error| Error::DatabaseCreationError {
+                url: db_url.to_string(),
+                source: error,
+            })?;
     }
     Ok(())
 }
-
 
 /// Connect to the database
 ///
@@ -39,9 +41,13 @@ async fn create_database(db_url: &str) -> Result<()> {
 ///
 /// * `DatabaseConnectionError` - If the database connection fails
 async fn connect_to_database(db_url: &str) -> Result<SqlitePool> {
-    let pool = SqlitePool::connect(db_url)
-        .await
-        .or_else(|error| return Err(Error::DatabaseConnectionError { url: db_url.to_string(), source: error }))?;
+    let pool =
+        SqlitePool::connect(db_url)
+            .await
+            .map_err(|error| Error::DatabaseConnectionError {
+                url: db_url.to_string(),
+                source: error,
+            })?;
     Ok(pool)
 }
 
@@ -62,7 +68,7 @@ async fn migrate_database(db: &SqlitePool) -> Result<()> {
     sqlx::migrate!("./migrations")
         .run(db)
         .await
-        .or_else(|err| return Err(Error::DatabaseMigrationError {source: err}))?;
+        .map_err(|err| Error::DatabaseMigrationError { source: err })?;
     Ok(())
 }
 
