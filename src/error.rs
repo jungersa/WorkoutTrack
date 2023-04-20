@@ -8,4 +8,7 @@ pub enum Error {
 
     #[error("Database migration error: {source}")]
     DatabaseMigrationError {source: sqlx::migrate::MigrateError},
+
+    #[error("Database connection error: {url}, {source}")]
+    DatabaseConnectionError { url: String, source: sqlx::Error },
 }
