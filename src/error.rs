@@ -5,4 +5,7 @@ pub enum Error {
 
     #[error("Database creation error: {url}, {source}")]
     DatabaseCreationError {url: String, source: sqlx::Error},
+
+    #[error("Database migration error: {source}")]
+    DatabaseMigrationError {source: sqlx::migrate::MigrateError},
 }
