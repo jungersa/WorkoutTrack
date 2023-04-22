@@ -16,6 +16,9 @@
       "shell": {
         "all": false,
         "open": true
+      },
+      "fs": {
+        "scope": ["$RESOURCE/migrations/*"]
       }
     },
     "bundle": {
@@ -28,7 +31,10 @@
         "icons/icon.ico"
       ],
       "identifier": "com.arnaud-jungers.workout-track",
-      "targets": "all"
+      "targets": "all",
+      "resources": [
+        "migrations/*"
+      ]
     },
     "security": {
       "csp": null

@@ -12,7 +12,8 @@ edition = "2021"
 tauri-build = { version = "1.2", features = [] }
 
 [dependencies]
-sqlx = { version = "0.6.3", features = ["runtime-async-std-rustls", "macros", "offline", "chrono", "migrate", "sqlite"] }
+tokio = { version = "1.14", features = ["full"] }
+sqlx = { version = "0.6.3", features = ["runtime-tokio-native-tls", "sqlite"] }
 tauri = { version = "1.2", features = ["shell-open"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
