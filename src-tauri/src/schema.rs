@@ -37,9 +37,4 @@ diesel::table! {
     }
 }
 
-diesel::allow_tables_to_appear_in_same_query!(
-    exopredefs,
-    exos,
-    messages,
-    workouts,
-);
+diesel::allow_tables_to_appear_in_same_query!(exopredefs, exos, messages, workouts,);

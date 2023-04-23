@@ -6,12 +6,13 @@ extern crate diesel;
 extern crate diesel_migrations;
 
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
-use std::{path, fs};
-use tokio::sync::{mpsc, Mutex};
+use std::{fs, path};
 
 mod database;
 mod models;
 mod schema;
+mod workout;
+mod cmd;
 
 pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!("./migrations");
 
@@ -43,7 +44,11 @@ async fn main() {
         .expect("Error migrating");
 
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![
+            greet,
+            cmd::get_messages,
+            cmd::add_message,
+            ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
