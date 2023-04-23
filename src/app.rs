@@ -15,6 +15,12 @@ struct GreetArgs<'a> {
     name: &'a str,
 }
 
+#[derive(Serialize, Deserialize)]
+struct AddMessageArgs<'a> {
+    message: &'a str,
+}
+
+
 #[function_component(App)]
 pub fn app() -> Html {
     let greet_input_ref = use_node_ref();
@@ -33,6 +39,9 @@ pub fn app() -> Html {
                         return;
                     }
 
+                    let args = to_value(&AddMessageArgs { message: &*name.clone() }).unwrap();
+                    invoke("add_message", args).await;
+                    println!("Added message");
                     let args = to_value(&GreetArgs { name: &*name }).unwrap();
                     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
                     let new_msg = invoke("greet", args).await.as_string().unwrap();
