@@ -48,6 +48,8 @@ async fn main() {
             greet,
             cmd::get_messages,
             cmd::add_message,
+            cmd::get_workouts,
+            cmd::add_workout
             ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
