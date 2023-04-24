@@ -1,7 +1,8 @@
 mod app;
+mod components;
 
-use app::App;
+use components::pages::home::Home;
 
 fn main() {
-    yew::Renderer::<App>::new().render();
+    yew::Renderer::<Home>::new().render();
 }
