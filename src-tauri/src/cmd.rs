@@ -1,3 +1,5 @@
+use serde::Deserialize;
+use serde::Serialize;
 use uuid::Uuid;
 
 use crate::models;
@@ -22,9 +24,15 @@ pub async fn add_message(message: String) -> () {
     workout::messages::Message::create_message(new_message)
 }
 
+#[derive(Serialize, Deserialize)]
+pub struct WorkoutList {
+    workouts: Vec<models::Workout>,
+}
+
 #[tauri::command]
-pub async fn get_workouts() -> Vec<models::Workout> {
-    workout::workouts::Workout::get_workouts()
+pub async fn get_workouts() -> WorkoutList {
+    let workouts = workout::workouts::Workout::get_workouts();
+    WorkoutList { workouts }
 }
 
 #[tauri::command]

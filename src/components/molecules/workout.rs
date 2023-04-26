@@ -1,14 +1,14 @@
-use yew::prelude::*;
 use chrono::NaiveDateTime;
+use serde::{Deserialize, Serialize};
+use yew::prelude::*;
 
-#[derive(Properties, PartialEq, Clone)]
+#[derive(Properties, PartialEq, Clone, Serialize, Deserialize, Debug)]
 pub struct WorkoutProps {
     pub id: i32,
     pub uuid: String,
     pub title: String,
     pub work_date: NaiveDateTime,
 }
-
 
 #[function_component(Workout)]
 pub fn workout(workout: &WorkoutProps) -> Html {

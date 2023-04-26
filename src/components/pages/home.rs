@@ -1,52 +1,33 @@
-use chrono::NaiveDateTime;
+use crate::components::organisms::workout_list::{WorkoutList, WorkoutListProps};
+use serde_wasm_bindgen::from_value;
+use wasm_bindgen::prelude::*;
+use wasm_bindgen_futures::spawn_local;
 use yew::prelude::*;
-use crate::components::molecules::workout::{WorkoutProps};
-use crate::components::organisms::workout_list::{WorkoutList};
 
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(js_namespace = ["window", "__TAURI__", "tauri"], catch)]
+    async fn invoke(cmd: &str, args: JsValue) -> Result<JsValue, JsValue>;
+}
 
 #[function_component(Home)]
 pub fn home() -> Html {
-    let workout_props = WorkoutProps {
-            id: 1,
-            uuid: "uuid".to_string(),
-            title: "Title".to_string(),
-            work_date: NaiveDateTime::from_timestamp_opt(0, 0).unwrap(),
-    };
-    let workout_props2 = WorkoutProps {
-            id: 2,
-            uuid: "uuid2".to_string(),
-            title: "Title2".to_string(),
-            work_date: NaiveDateTime::from_timestamp_opt(0, 0).unwrap(),
-    };
-    let workout_props3 = WorkoutProps {
-            id: 3,
-            uuid: "uuid3".to_string(),
-            title: "Title3".to_string(),
-            work_date: NaiveDateTime::from_timestamp_opt(0, 0).unwrap(),
-    };
-    let workout_props4 = WorkoutProps {
-        id: 4,
-        uuid: "uuid4".to_string(),
-        title: "Title4".to_string(),
-        work_date: NaiveDateTime::from_timestamp_opt(0, 0).unwrap(),
-    };
-    let workout_props5 = WorkoutProps {
-        id: 5,
-        uuid: "uuid5".to_string(),
-        title: "Title5".to_string(),
-        work_date: NaiveDateTime::from_timestamp_opt(0, 0).unwrap(),
-    };
-    let workout_props6 = WorkoutProps {
-        id: 6,
-        uuid: "uuid6".to_string(),
-        title: "Title6".to_string(),
-        work_date: NaiveDateTime::from_timestamp_opt(0, 0).unwrap(),
-    };
+    let workouts = use_state_eq(|| WorkoutListProps { workouts: vec![] });
+
+    let workouts_clone = workouts.clone();
+    spawn_local(async move {
+        let workouts_data = invoke("get_workouts", JsValue::NULL)
+            .await
+            .expect("failed to get workouts");
+        let workouts_data: WorkoutListProps = from_value(workouts_data).unwrap();
+        workouts_clone.set(workouts_data);
+    });
+
     html! {
         <body class="bg-gray-100">
             <div class="container mx-auto py-8">
                 <h1 class="text-2xl font-bold mb-4">{"My Workouts"}</h1>
-                <WorkoutList workouts={vec![workout_props, workout_props2, workout_props3, workout_props4, workout_props5, workout_props6]} />
+                <WorkoutList workouts={workouts.workouts.clone()} />
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded fixed bottom-0 right-0 mb-8 mr-8">{"Add Workout"}</button>
             </div>
         </body>

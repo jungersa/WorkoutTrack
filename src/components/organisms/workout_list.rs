@@ -1,12 +1,12 @@
+use serde::{Deserialize, Serialize};
 use yew::prelude::*;
 
 use crate::components::molecules::workout::{Workout, WorkoutProps};
 
-#[derive(Properties, PartialEq, Clone)]
+#[derive(Properties, PartialEq, Clone, Serialize, Deserialize, Debug)]
 pub struct WorkoutListProps {
     pub workouts: Vec<WorkoutProps>,
 }
-
 
 #[function_component(WorkoutList)]
 pub fn workout_list(workout: &WorkoutListProps) -> Html {
