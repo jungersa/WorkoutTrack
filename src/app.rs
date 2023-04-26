@@ -20,7 +20,6 @@ struct AddMessageArgs<'a> {
     message: &'a str,
 }
 
-
 #[function_component(App)]
 pub fn app() -> Html {
     let greet_input_ref = use_node_ref();
@@ -39,7 +38,10 @@ pub fn app() -> Html {
                         return;
                     }
 
-                    let args = to_value(&AddMessageArgs { message: &*name.clone() }).unwrap();
+                    let args = to_value(&AddMessageArgs {
+                        message: &*name.clone(),
+                    })
+                    .unwrap();
                     invoke("add_message", args).await;
                     println!("Added message");
                     let args = to_value(&GreetArgs { name: &*name }).unwrap();

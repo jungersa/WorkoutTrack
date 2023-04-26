@@ -8,11 +8,11 @@ extern crate diesel_migrations;
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 use std::{fs, path};
 
+mod cmd;
 mod database;
 mod models;
 mod schema;
 mod workout;
-mod cmd;
 
 pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!("./migrations");
 
@@ -50,7 +50,7 @@ async fn main() {
             cmd::add_message,
             cmd::get_workouts,
             cmd::add_workout
-            ])
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

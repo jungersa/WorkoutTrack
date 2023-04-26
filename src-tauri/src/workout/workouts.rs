@@ -7,7 +7,6 @@ use crate::schema;
 pub struct Workout {}
 
 impl Workout {
-
     /// Get all workouts
     pub fn get_workouts() -> Vec<models::Workout> {
         use schema::workouts::dsl::*;

@@ -1,6 +1,6 @@
 use super::schema::{messages, workouts};
-use serde::{Deserialize, Serialize};
 use chrono::NaiveDateTime;
+use serde::{Deserialize, Serialize};
 
 #[derive(Queryable, Serialize, Deserialize, Debug)]
 pub struct Message {
