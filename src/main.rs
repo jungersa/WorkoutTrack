@@ -1,4 +1,3 @@
-mod app;
 mod components;
 
 use components::pages::home::Home;
