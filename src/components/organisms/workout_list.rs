@@ -1,19 +1,20 @@
-use serde::{Deserialize, Serialize};
 use yew::prelude::*;
 
 use crate::components::molecules::workout::{Workout, WorkoutProps};
 
-#[derive(Properties, PartialEq, Clone, Serialize, Deserialize, Debug)]
+#[derive(Properties, PartialEq, Clone, Debug)]
 pub struct WorkoutListProps {
     pub workouts: Vec<WorkoutProps>,
 }
 
 #[function_component(WorkoutList)]
-pub fn workout_list(workout: &WorkoutListProps) -> Html {
+pub fn workout_list(props: &WorkoutListProps) -> Html {
+    let WorkoutListProps { workouts } = props.clone();
+
     html! {
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {for workout.workouts.iter().map(|workout| html! {
-                <Workout id={workout.id} uuid={workout.uuid.clone()} title={workout.title.clone()} work_date={workout.work_date} />
+            {for workouts.iter().map(|workout| html! {
+                <Workout ..workout.clone() />
             })}
         </div>
     }
