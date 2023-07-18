@@ -18,24 +18,23 @@ pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!("./migrations");
 
 #[tauri::command]
 fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
+    format!("Hello, {name}! You've been greeted from Rust!")
 }
 
 #[tokio::main]
 async fn main() {
-    let home_dir = tauri::api::path::home_dir();
 
-    match home_dir {
-        Some(home_dir) => {
+    tauri::api::path::home_dir().map_or_else(
+        || {
+            println!("Could not find home directory");
+        },
+        |home_dir| {
             let app_config = path::Path::new(&home_dir);
             let app_config = app_config.join(".workout_track");
 
-            fs::create_dir_all(app_config).unwrap();
-        }
-        None => {
-            println!("Could not find home directory");
-        }
-    }
+            fs::create_dir_all(app_config).expect("Could not create app config directory");
+        },
+    );
 
     let mut connection = database::establish_connection();
 
