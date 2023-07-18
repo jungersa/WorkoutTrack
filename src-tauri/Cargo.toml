@@ -9,15 +9,15 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = { version = "1.2", features = [] }
+tauri-build = { version = "1.4", features = [] }
 
 [dependencies]
-tokio = { version = "1.14", features = ["full"] }
+tokio = { version = "1.29", features = ["full"] }
 chrono = { version="0.4", features = ["serde"] }
-uuid = { version = "1.3", features = [ "v4", "fast-rng", "macro-diagnostics" ] }
-diesel = { version = "2.0", features = ["sqlite", "chrono", "uuid"] }
-diesel_migrations = { version = "2.0.0", features = ["sqlite"] }
-tauri = { version = "1.2", features = ["shell-open"] }
+uuid = { version = "1.4", features = [ "v4", "fast-rng", "macro-diagnostics" ] }
+diesel = { version = "2.1", features = ["sqlite", "chrono", "uuid"] }
+diesel_migrations = { version = "2.1.0", features = ["sqlite"] }
+tauri = { version = "1.4", features = ["shell-open"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 
