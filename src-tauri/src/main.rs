@@ -1,12 +1,22 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+extern crate pretty_env_logger;
+
+#[macro_use]
+extern crate log;
+
 #[macro_use]
 extern crate diesel;
 extern crate diesel_migrations;
 
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 use std::{fs, path};
+
+use chrono::Local;
+use log::LevelFilter;
+use pretty_env_logger::env_logger::Builder;
+use std::io::Write;
 
 mod cmd;
 mod database;
@@ -19,6 +29,19 @@ pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!("./migrations");
 
 #[tokio::main]
 async fn main() {
+    Builder::new()
+        .format(|buf, record| {
+            writeln!(
+                buf,
+                "{} [{}] - {}",
+                Local::now().format("%Y-%m-%dT%H:%M:%S"),
+                record.level(),
+                record.args()
+            )
+        })
+        .filter(None, LevelFilter::Info)
+        .init();
+
     // Create the app config directory
     tauri::api::path::home_dir().map_or_else(
         || {

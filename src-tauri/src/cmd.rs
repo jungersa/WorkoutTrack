@@ -64,7 +64,6 @@ pub fn get_workouts() -> WorkoutList {
     WorkoutList { workouts }
 }
 
-
 /// Add a new workout to the database.
 ///
 /// A tauri command that adds a new workout to the database.
@@ -80,7 +79,7 @@ pub fn get_workouts() -> WorkoutList {
 /// ```
 /// use workout_tracker::cmd::add_workout;
 ///
-/// add_workout("My Workout", "2021-01-01 12:00:00");
+/// add_workout("My Workout", "2021-01-01T12:00");
 /// ```
 ///
 /// # Panics
@@ -100,8 +99,7 @@ pub fn get_workouts() -> WorkoutList {
 #[tauri::command]
 pub fn add_workout(title: String, date: &str) {
     let workout_uuid = Uuid::new_v4().hyphenated().to_string();
-    let date =
-        NaiveDateTime::parse_from_str(date, "%Y-%m-%d %H:%M:%S").expect("Error parsing date");
+    let date = NaiveDateTime::parse_from_str(date, "%Y-%m-%dT%H:%M").expect("Error parsing date");
 
     let new_workout = models::NewWorkout {
         uuid: workout_uuid,
@@ -111,4 +109,6 @@ pub fn add_workout(title: String, date: &str) {
 
     let _: Result<(), _> = workout::workouts::Workout::create_workout(&new_workout)
         .map_err(|err| panic!("Error creating workout: {err:?}"));
+
+    log::info!("Workout Created: {new_workout:?}");
 }
