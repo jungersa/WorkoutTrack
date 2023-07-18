@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 use yew::prelude::*;
 
 use crate::components::atoms::text_input::TextInput;
+use crate::components::atoms::date_time_input::DateTimeInput;
 
 #[derive(Clone, Default, Serialize, Deserialize, Debug)]
 pub struct WorkoutData {
@@ -23,7 +24,7 @@ pub fn add_workout_form(props: &Props) -> Html {
         cloned_state.set(WorkoutData {
             title,
             ..(*cloned_state).clone()
-        })
+        });
     });
 
     let cloned_state = state.clone();
@@ -31,7 +32,7 @@ pub fn add_workout_form(props: &Props) -> Html {
         cloned_state.set(WorkoutData {
             date,
             ..(*cloned_state).clone()
-        })
+        });
     });
 
     let form_onsubmit = props.onsubmit.clone();
@@ -52,9 +53,8 @@ pub fn add_workout_form(props: &Props) -> Html {
         </div>
         <div class="mb-4">
         <label class="mb-1 block font-bold text-gray-700 text-left" for="work_date"> {"Work Date"} </label>
-            <TextInput
+            <DateTimeInput
                 name="work_date"
-                placeholder="Work Date"
                 handle_change={date_changed} />
         </div>
         <div class="flex items-center justify-between">
