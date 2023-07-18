@@ -1,7 +1,7 @@
 use chrono::NaiveDateTime;
 use yew::prelude::*;
 
-#[derive(Properties, PartialEq, Clone, Debug)]
+#[derive(Properties, PartialEq, Clone, Debug, Eq)]
 pub struct WorkoutProps {
     pub id: i32,
     pub uuid: AttrValue,

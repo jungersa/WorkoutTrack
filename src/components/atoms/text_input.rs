@@ -2,15 +2,15 @@ use web_sys::HtmlInputElement;
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq, Clone)]
-pub struct TextInputProps {
+pub struct Props {
     pub name: AttrValue,
     pub placeholder: AttrValue,
     pub handle_change: Callback<String>,
 }
 
 #[function_component(TextInput)]
-pub fn workout(props: &TextInputProps) -> Html {
-    let TextInputProps {
+pub fn text_input(props: &Props) -> Html {
+    let Props {
         name,
         placeholder,
         handle_change,

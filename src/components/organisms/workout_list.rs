@@ -2,14 +2,14 @@ use yew::prelude::*;
 
 use crate::components::molecules::workout::{Workout, WorkoutProps};
 
-#[derive(Properties, PartialEq, Clone, Debug)]
-pub struct WorkoutListProps {
+#[derive(Properties, PartialEq, Clone, Debug, Eq)]
+pub struct Props {
     pub workouts: Vec<WorkoutProps>,
 }
 
 #[function_component(WorkoutList)]
-pub fn workout_list(props: &WorkoutListProps) -> Html {
-    let WorkoutListProps { workouts } = props.clone();
+pub fn workout_list(props: &Props) -> Html {
+    let Props { workouts } = props.clone();
 
     html! {
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

@@ -18,7 +18,7 @@ extern "C" {
     async fn invoke(cmd: &str, args: JsValue) -> Result<JsValue, JsValue>;
 }
 
-#[derive(Deserialize, Serialize, Clone, Debug, PartialEq)]
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
 pub struct WorkoutVec {
     pub workouts: Vec<Workout>,
 }
@@ -37,7 +37,7 @@ impl html::IntoPropValue<Vec<WorkoutProps>> for WorkoutVec {
     }
 }
 
-#[derive(Deserialize, Serialize, Clone, Debug, PartialEq)]
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
 pub struct Workout {
     pub id: i32,
     pub uuid: String,
@@ -55,18 +55,19 @@ pub fn home() -> Html {
         let workouts_data = invoke("get_workouts", JsValue::NULL)
             .await
             .expect("failed to get workouts");
-        let workouts_data: WorkoutVec = from_value(workouts_data).unwrap();
+        let workouts_data: WorkoutVec =
+            from_value(workouts_data).expect("Couldn't transform the WorkoutData");
         workouts_clone.set(workouts_data);
     });
 
     let form_onsubmit = Callback::from(move |workout: WorkoutData| {
         spawn_local(async move {
-            let args = to_value(&workout.clone()).unwrap();
+            let args = to_value(&workout.clone()).expect("Couldn't transform the WorkoutData");
             match invoke("add_workout", args).await {
                 Ok(_) => println!("Added Workout"),
-                Err(_) => println!("Added Workout"),
+                Err(_) => println!("Couldn't add the Workout"),
             }
-        })
+        });
     });
 
     html! {
