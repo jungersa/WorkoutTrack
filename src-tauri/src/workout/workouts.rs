@@ -1,7 +1,7 @@
 use diesel::prelude::*;
 
 use crate::database::establish_connection;
-use crate::errors::*;
+use crate::errors::{DatabaseError, Error};
 use crate::models;
 use crate::schema;
 
@@ -24,10 +24,10 @@ impl Workout {
     ///
     /// The workouts are returned as a list of `Workout` structs.
     ///
-    pub fn get_workouts() -> Result<Vec<models::Workout>, Error> {
+    pub fn get_workouts(
+        connection: &mut diesel::SqliteConnection,
+    ) -> Result<Vec<models::Workout>, Error> {
         use crate::schema::workouts::dsl::workouts;
-
-        let connection = &mut establish_connection()?;
 
         workouts
             .load::<models::Workout>(connection)
@@ -55,9 +55,10 @@ impl Workout {
     ///
     /// The workout is returned as a `Workout` struct.
     ///
-    pub fn get_workout_by_uuid(uuid: &str) -> Result<models::Workout, Error> {
-        let connection = &mut establish_connection()?;
-
+    pub fn get_workout_by_uuid(
+        connection: &mut diesel::SqliteConnection,
+        uuid: &str,
+    ) -> Result<models::Workout, Error> {
         schema::workouts::dsl::workouts
             .filter(schema::workouts::uuid.eq(uuid))
             .first::<models::Workout>(connection)
@@ -87,10 +88,11 @@ impl Workout {
     ///
     /// The new workout is created in the database, with the data from the `NewWorkout` struct, and a new ID.
     ///
-    pub fn create_workout(new_workout: &models::NewWorkout) -> Result<(), Error> {
+    pub fn create_workout(
+        connection: &mut diesel::SqliteConnection,
+        new_workout: &models::NewWorkout,
+    ) -> Result<(), Error> {
         use crate::schema::workouts::dsl::workouts;
-
-        let connection = &mut establish_connection()?;
 
         diesel::insert_into(workouts)
             .values(new_workout)
@@ -116,9 +118,7 @@ impl Workout {
     /// A workout with the given uuid must exist in the database.
     /// The connection to the database must be established.
     ///
-    pub fn delete_workout(uuid: &str) -> Result<(), Error> {
-        let connection = &mut establish_connection()?;
-
+    pub fn delete_workout(connection: &mut diesel::SqliteConnection, uuid: &str) -> Result<(), Error> {
         diesel::delete(schema::workouts::dsl::workouts.filter(schema::workouts::uuid.eq(uuid)))
             .execute(connection)
             .map(|_| ())

@@ -2,6 +2,7 @@ use serde::Deserialize;
 use serde::Serialize;
 use uuid::Uuid;
 
+use crate::database::establish_connection;
 use crate::models;
 use crate::workout;
 
@@ -56,12 +57,23 @@ pub struct WorkoutList {
 ///
 /// The workouts are returned.
 #[tauri::command]
-pub fn get_workouts() -> WorkoutList {
-    let workouts = match workout::workouts::Workout::get_workouts() {
-        Ok(workouts) => workouts,
-        Err(err) => panic!("Error getting workouts: {err:?}"),
+pub fn get_workouts() -> Result<WorkoutList, String> {
+    let mut connection = match establish_connection() {
+        Ok(connection) => connection,
+        Err(err) => {
+            log::error!("Error establishing connection: {err:?}");
+            return Err("Error establishing connection".to_string());
+        }
     };
-    WorkoutList { workouts }
+
+    let workouts = match workout::workouts::Workout::get_workouts(&mut connection) {
+        Ok(workouts) => workouts,
+        Err(err) => {
+            log::error!("Error getting workouts: {err:?}");
+            return Err("Error getting workouts".to_string());
+        }
+    };
+    Ok(WorkoutList { workouts })
 }
 
 /// Add a new workout to the database.
@@ -97,9 +109,16 @@ pub fn get_workouts() -> WorkoutList {
 /// A new workout will be added to the database.
 ///
 #[tauri::command]
-pub fn add_workout(title: String, date: &str) {
+pub fn add_workout(title: String, date: &str) -> Result<(), String> {
     let workout_uuid = Uuid::new_v4().hyphenated().to_string();
-    let date = NaiveDateTime::parse_from_str(date, "%Y-%m-%dT%H:%M").expect("Error parsing date");
+
+    let date = match NaiveDateTime::parse_from_str(date, "%Y-%m-%dT%H:%M") {
+        Ok(date) => date,
+        Err(err) => {
+            log::error!("Error parsing date: {err:?}");
+            return Err("Error parsing date".to_string());
+        }
+    };
 
     let new_workout = models::NewWorkout {
         uuid: workout_uuid,
@@ -107,8 +126,20 @@ pub fn add_workout(title: String, date: &str) {
         work_date: date,
     };
 
-    let _: Result<(), _> = workout::workouts::Workout::create_workout(&new_workout)
-        .map_err(|err| panic!("Error creating workout: {err:?}"));
+    let mut connection = match establish_connection() {
+        Ok(connection) => connection,
+        Err(err) => {
+            log::error!("Error establishing connection: {err:?}");
+            return Err("Error establishing connection".to_string());
+        }
+    };
 
-    log::info!("Workout Created: {new_workout:?}");
+    match workout::workouts::Workout::create_workout(&mut connection, &new_workout) {
+        Ok(_) => log::info!("Workout Created: {new_workout:?}"),
+        Err(err) => {
+            log::error!("Error creating workout: {err:?}");
+            return Err("Error creating workout".to_string());
+        }
+    };
+    return Ok(());
 }

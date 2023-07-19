@@ -2,7 +2,7 @@ use diesel::prelude::*;
 use diesel::sqlite::SqliteConnection;
 use std::path;
 
-use crate::errors::*;
+use crate::errors::{DatabaseError, Error, FilesystemError};
 
 /// Establishes a connection to the database.
 ///
