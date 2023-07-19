@@ -66,7 +66,7 @@ pub fn get_workouts() -> Result<WorkoutList, String> {
         }
     };
 
-    let workouts = match workout::workouts::Workout::get_workouts(&mut connection) {
+    let workouts = match workout::workouts::get_workouts(&mut connection) {
         Ok(workouts) => workouts,
         Err(err) => {
             log::error!("Error getting workouts: {err:?}");
@@ -134,7 +134,7 @@ pub fn add_workout(title: String, date: &str) -> Result<(), String> {
         }
     };
 
-    match workout::workouts::Workout::create_workout(&mut connection, &new_workout) {
+    match workout::workouts::create_workout(&mut connection, &new_workout) {
         Ok(_) => log::info!("Workout Created: {new_workout:?}"),
         Err(err) => {
             log::error!("Error creating workout: {err:?}");

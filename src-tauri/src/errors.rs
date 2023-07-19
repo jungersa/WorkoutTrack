@@ -5,7 +5,7 @@ use thiserror::Error;
 /// This is used to wrap all errors that can occur in the application.
 ///    - `DatabaseError`
 ///    - `FilesystemError`
-#[derive(Error, Debug)]
+#[derive(Error, Debug, PartialEq)]
 pub enum Error {
     /// Represents an error that can occur when interacting with the database.
     #[error("Database Error")]
@@ -21,7 +21,7 @@ pub enum Error {
 ///   - `CouldNotConnect`: could not connect to database
 ///   - `QueryError`: could not query database
 ///   - `CouldNotConvertPath`: could not convert path to string
-#[derive(Error, Debug)]
+#[derive(Error, Debug, PartialEq)]
 pub enum DatabaseError {
     /// Represents an error that can occur trying to connect to the database.
     #[error("Could not establish connection to database")]
@@ -38,7 +38,7 @@ pub enum DatabaseError {
 ///
 /// This is used to wrap all errors that can occur when interacting with the filesystem.
 ///  - `CouldNotFindHomeDir`: Could not find tauri home directory:
-#[derive(Error, Debug)]
+#[derive(Error, Debug, PartialEq)]
 pub enum FilesystemError {
     /// Represents an error that can occur when trying to find the tauri home directory.
     #[error("Could not find tauri home directory")]
