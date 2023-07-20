@@ -4,8 +4,6 @@ use crate::errors::{DatabaseError, Error};
 use crate::models;
 use crate::schema;
 
-pub struct Workout {}
-
 /// Get all the workouts in the database
 ///
 /// # Arguments

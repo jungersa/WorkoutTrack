@@ -1,12 +1,8 @@
 use crate::components::{
-    molecules::{
-        add_workout_form::{AddWorkoutForm, WorkoutData},
-        workout::WorkoutProps,
-    },
-    organisms::workout_list::WorkoutList,
+    molecules::add_workout_form::AddWorkoutForm, organisms::workout_list::WorkoutList,
 };
-use chrono::NaiveDateTime;
-use serde::{Deserialize, Serialize};
+
+use crate::types::{WorkoutCreation, WorkoutVec};
 use serde_wasm_bindgen::{from_value, to_value};
 use wasm_bindgen::prelude::*;
 use wasm_bindgen_futures::spawn_local;
@@ -18,55 +14,28 @@ extern "C" {
     async fn invoke(cmd: &str, args: JsValue) -> Result<JsValue, JsValue>;
 }
 
-#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
-pub struct WorkoutVec {
-    pub workouts: Vec<Workout>,
-}
-
-impl html::IntoPropValue<Vec<WorkoutProps>> for WorkoutVec {
-    fn into_prop_value(self) -> Vec<WorkoutProps> {
-        self.workouts
-            .into_iter()
-            .map(|workout| WorkoutProps {
-                id: workout.id,
-                uuid: AttrValue::from(workout.uuid),
-                title: AttrValue::from(workout.title),
-                work_date: workout.work_date,
-            })
-            .collect()
-    }
-}
-
-#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
-pub struct Workout {
-    pub id: i32,
-    pub uuid: String,
-    pub title: String,
-    pub work_date: NaiveDateTime,
-}
-
 #[function_component(Home)]
 pub fn home() -> Html {
-    // Change to props!()
     let workouts = use_state_eq(|| WorkoutVec { workouts: vec![] });
 
-    let workouts_clone = workouts.clone();
-    spawn_local(async move {
-        let workouts_data = invoke("get_workouts", JsValue::NULL)
-            .await
-            .expect("failed to get workouts");
-        let workouts_data: WorkoutVec =
-            from_value(workouts_data).expect("Couldn't transform the WorkoutData");
-        workouts_clone.set(workouts_data);
-    });
+    {
+        let workouts = workouts.clone();
+        spawn_local(async move {
+            let workouts_data = invoke("get_workouts", JsValue::NULL)
+                .await
+                .expect("failed to get workouts");
+            let workouts_data: WorkoutVec =
+                from_value(workouts_data).expect("Couldn't transform the WorkoutData");
+            workouts.set(workouts_data);
+        });
+    };
 
-    let form_onsubmit = Callback::from(move |workout: WorkoutData| {
+    let form_onsubmit = Callback::from(|workout: WorkoutCreation| {
         spawn_local(async move {
             let args = to_value(&workout.clone()).expect("Couldn't transform the WorkoutData");
-            match invoke("add_workout", args).await {
-                Ok(_) => println!("Added Workout"),
-                Err(_) => println!("Couldn't add the Workout"),
-            }
+            invoke("add_workout", args)
+                .await
+                .expect("failed to add workout");
         });
     });
 

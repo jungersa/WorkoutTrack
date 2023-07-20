@@ -1,13 +1,5 @@
-use chrono::NaiveDateTime;
+use crate::types::WorkoutProps;
 use yew::prelude::*;
-
-#[derive(Properties, PartialEq, Clone, Debug, Eq)]
-pub struct WorkoutProps {
-    pub id: i32,
-    pub uuid: AttrValue,
-    pub title: AttrValue,
-    pub work_date: NaiveDateTime,
-}
 
 #[function_component(Workout)]
 pub fn workout(props: &WorkoutProps) -> Html {

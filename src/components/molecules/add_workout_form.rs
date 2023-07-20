@@ -1,46 +1,49 @@
-use serde::{Deserialize, Serialize};
 use yew::prelude::*;
 
-use crate::components::atoms::text_input::TextInput;
 use crate::components::atoms::date_time_input::DateTimeInput;
-
-#[derive(Clone, Default, Serialize, Deserialize, Debug)]
-pub struct WorkoutData {
-    pub title: String,
-    pub date: String,
-}
+use crate::components::atoms::text_input::TextInput;
+use crate::types::WorkoutCreation;
 
 #[derive(Clone, Properties, PartialEq)]
 pub struct Props {
-    pub onsubmit: Callback<WorkoutData>,
+    pub onsubmit: Callback<WorkoutCreation>,
 }
 
 #[function_component(AddWorkoutForm)]
 pub fn add_workout_form(props: &Props) -> Html {
-    let state = use_state(|| WorkoutData::default());
+    let state: UseStateHandle<WorkoutCreation> = use_state(WorkoutCreation::default);
 
-    let cloned_state = state.clone();
-    let title_changed = Callback::from(move |title| {
-        cloned_state.set(WorkoutData {
-            title,
-            ..(*cloned_state).clone()
-        });
-    });
+    let title_changed = {
+        let state = state.clone();
 
-    let cloned_state = state.clone();
-    let date_changed = Callback::from(move |date| {
-        cloned_state.set(WorkoutData {
-            date,
-            ..(*cloned_state).clone()
-        });
-    });
+        Callback::from(move |title| {
+            state.set(WorkoutCreation {
+                title,
+                ..(*state).clone()
+            });
+        })
+    };
 
-    let form_onsubmit = props.onsubmit.clone();
-    let cloned_state = state;
-    let onsubmit = Callback::from(move |event: SubmitEvent| {
-        event.prevent_default();
-        form_onsubmit.emit((*cloned_state).clone());
-    });
+    let date_changed = {
+        let state: UseStateHandle<WorkoutCreation> = state.clone();
+
+        Callback::from(move |date| {
+            state.set(WorkoutCreation {
+                date,
+                ..(*state).clone()
+            });
+        })
+    };
+
+    let onsubmit = {
+        let form_onsubmit = props.onsubmit.clone();
+        let state: UseStateHandle<WorkoutCreation> = state.clone();
+
+        Callback::from(move |event: SubmitEvent| {
+            event.prevent_default();
+            form_onsubmit.emit((*state).clone());
+        })
+    };
 
     html! {
     <form class="mb-4 rounded bg-white px-8 pb-8 pt-6 shadow-md" {onsubmit}>

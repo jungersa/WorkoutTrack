@@ -1,6 +1,7 @@
 use yew::prelude::*;
 
-use crate::components::molecules::workout::{Workout, WorkoutProps};
+use crate::components::molecules::workout::Workout;
+use crate::types::WorkoutProps;
 
 #[derive(Properties, PartialEq, Clone, Debug, Eq)]
 pub struct Props {

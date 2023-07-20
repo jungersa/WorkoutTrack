@@ -61,18 +61,20 @@ async fn main() {
         Err(error) => panic!("Problem connection to the database: {error:?}",),
     };
 
-    connection
-        .run_pending_migrations(MIGRATIONS)
-        .expect("Error migrating");
+    match connection.run_pending_migrations(MIGRATIONS) {
+        Ok(_) => log::info!("Migrations run successfully"),
+        Err(error) => panic!("Problem running migrations: {error:?}",),
+    };
+
 
     // Run the Tauri application
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             cmd::get_messages,
             cmd::add_message,
-            cmd::get_workouts,
+            cmd::get_workout,
             cmd::add_workout
         ])
         .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+        .expect("Error while running tauri application");
 }

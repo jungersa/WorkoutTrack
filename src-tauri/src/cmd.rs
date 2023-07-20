@@ -57,7 +57,7 @@ pub struct WorkoutList {
 ///
 /// The workouts are returned.
 #[tauri::command]
-pub fn get_workouts() -> Result<WorkoutList, String> {
+pub fn get_workout() -> Result<WorkoutList, String> {
     let mut connection = match establish_connection() {
         Ok(connection) => connection,
         Err(err) => {

@@ -14,14 +14,17 @@ pub fn date_time_input(props: &Props) -> Html {
         handle_change,
     } = props;
 
-    let handle_change_cloned = handle_change.clone();
-    let onchange = Callback::from(move |event: Event| {
-        let input = event.target_dyn_into::<HtmlInputElement>();
+    let onchange = {
+        let handle_change = handle_change.clone();
 
-        if let Some(input) = input {
-            handle_change_cloned.emit(input.value());
-        }
-    });
+        Callback::from(move |event: Event| {
+            let input = event.target_dyn_into::<HtmlInputElement>();
+
+            if let Some(input) = input {
+                handle_change.emit(input.value());
+            }
+        })
+    };
 
     html! {
         <input

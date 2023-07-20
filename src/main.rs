@@ -1,5 +1,5 @@
 mod components;
-
+mod types;
 use components::pages::home::Home;
 
 fn main() {
