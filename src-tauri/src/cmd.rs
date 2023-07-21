@@ -8,22 +8,6 @@ use crate::workout;
 
 use chrono::NaiveDateTime;
 
-#[tauri::command]
-pub fn get_messages() -> Vec<models::Message> {
-    workout::messages::Message::get_messages()
-}
-
-#[tauri::command]
-pub fn add_message(message: String) {
-    let message_uuid = Uuid::new_v4().hyphenated().to_string();
-
-    let new_message = models::NewMessage {
-        uuid: message_uuid,
-        content: message,
-    };
-
-    workout::messages::Message::create_message(&new_message);
-}
 
 /// Represents a list of workouts.
 #[derive(Serialize, Deserialize)]
@@ -57,7 +41,7 @@ pub struct WorkoutList {
 ///
 /// The workouts are returned.
 #[tauri::command]
-pub fn get_workout() -> Result<WorkoutList, String> {
+pub fn get_workouts() -> Result<WorkoutList, String> {
     let mut connection = match establish_connection() {
         Ok(connection) => connection,
         Err(err) => {
