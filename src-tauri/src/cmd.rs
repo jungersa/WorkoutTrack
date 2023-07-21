@@ -127,3 +127,40 @@ pub fn add_workout(title: String, date: &str) -> Result<(), String> {
     };
     return Ok(());
 }
+
+/// Get a workout by its uuid from the database.
+///
+/// A tauri command that retrieves a workout from the database.
+/// The workout is returned as a `WorkoutUnique` struct.
+///
+/// # Arguments
+///
+/// * `uuid` - The uuid of the workout.
+///
+/// # Pre-condition
+///
+/// The connection to the database must be established.
+/// The workout must exist in the database.
+///
+/// # Post-condition
+///
+/// The workout is returned if it exists in the database or an error is returned if it does not exist.
+#[tauri::command]
+pub fn get_workout(uuid: String) -> Result<models::WorkoutUnique, String> {
+    let mut connection = match establish_connection() {
+        Ok(connection) => connection,
+        Err(err) => {
+            log::error!("Error establishing connection: {err:?}");
+            return Err("Error establishing connection".to_string());
+        }
+    };
+
+    let workout = match workout::workouts::get_workout_by_uuid(&mut connection, &uuid) {
+        Ok(workout) => workout,
+        Err(err) => {
+            log::error!("Error getting workout: {err:?}");
+            return Err("Error getting workout".to_string());
+        }
+    };
+    Ok(workout)
+}

@@ -1,7 +1,7 @@
 use diesel::prelude::*;
 
 use crate::errors::{DatabaseError, Error};
-use crate::models;
+use crate::models::{self, Exo, WorkoutUnique};
 use crate::schema;
 
 /// Get all the workouts in the database
@@ -59,11 +59,23 @@ pub fn get_workouts(
 pub fn get_workout_by_uuid(
     connection: &mut diesel::SqliteConnection,
     uuid: &str,
-) -> Result<models::Workout, Error> {
-    schema::workouts::dsl::workouts
+) -> Result<models::WorkoutUnique, Error> {
+    let workout: models::Workout = schema::workouts::dsl::workouts
         .filter(schema::workouts::uuid.eq(uuid))
         .first::<models::Workout>(connection)
-        .map_err(|err| Error::DatabaseError(DatabaseError::QueryError(err)))
+        .map_err(|err| Error::DatabaseError(DatabaseError::QueryError(err)))?;
+
+    let exercises = Exo::belonging_to(&workout)
+        .load(connection)
+        .map_err(|err| Error::DatabaseError(DatabaseError::QueryError(err)))?;
+
+    Ok(WorkoutUnique {
+        id: workout.id,
+        uuid: workout.uuid,
+        title: workout.title,
+        work_date: workout.work_date,
+        exercises: exercises,
+    })
 }
 
 /// Create a new workout in the database
@@ -197,5 +209,4 @@ mod tests {
         // Perform assertions to verify the correctness of the returned workouts
         assert_eq!(result.len(), 2);
     }
-
 }

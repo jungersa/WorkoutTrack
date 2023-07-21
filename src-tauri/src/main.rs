@@ -3,7 +3,6 @@
 
 extern crate pretty_env_logger;
 
-#[macro_use]
 extern crate log;
 
 #[macro_use]
@@ -70,10 +69,9 @@ async fn main() {
     // Run the Tauri application
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
-            cmd::get_messages,
-            cmd::add_message,
+            cmd::get_workouts,
+            cmd::add_workout,
             cmd::get_workout,
-            cmd::add_workout
         ])
         .run(tauri::generate_context!())
         .expect("Error while running tauri application");
