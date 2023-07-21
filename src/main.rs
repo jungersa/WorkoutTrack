@@ -1,7 +1,20 @@
 mod components;
 mod types;
-use components::pages::home::Home;
+mod router;
+
+use yew::prelude::*;
+use yew_router::prelude::*;
+
+use crate::router::{Route, switch};
 
 fn main() {
-    yew::Renderer::<Home>::new().render();
+    yew::Renderer::<Main>::new().render();
+}
+#[function_component(Main)]
+fn app() -> Html {
+    html! {
+        <BrowserRouter>
+            <Switch<Route> render={switch} />
+        </BrowserRouter>
+    }
 }
