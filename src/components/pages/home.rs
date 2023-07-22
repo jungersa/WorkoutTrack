@@ -1,3 +1,4 @@
+use crate::components::molecules::bottom_nav::BottomNav;
 use crate::components::organisms::workout_list::WorkoutList;
 
 use crate::router::Route;
@@ -35,8 +36,9 @@ pub fn home() -> Html {
             <div class="container mx-auto py-8">
                 <h1 class="text-2xl font-bold mb-4">{"My Workouts"}</h1>
                 <WorkoutList workouts={(*workouts).clone()} />
-                <Link<Route> to={Route::CreateWorkout}><button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded fixed bottom-0 right-0 mb-8 mr-8">{"Add Workout"}</button></Link<Route>>
+                <Link<Route> to={Route::CreateWorkout}><button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded fixed bottom-0 right-0 mb-24 mr-8">{"Add Workout"}</button></Link<Route>>
             </div>
+            <BottomNav on_home_page=true on_exo_page=false />
         </body>
     }
 }

@@ -1,5 +1,6 @@
 use crate::components::molecules::add_workout_form::AddWorkoutForm;
 
+use crate::components::molecules::bottom_nav::BottomNav;
 use crate::router::Route;
 use crate::types::WorkoutCreation;
 use serde_wasm_bindgen::to_value;
@@ -19,7 +20,6 @@ pub fn create_workout() -> Html {
     let navigator = use_navigator().expect("No navigator");
 
     let form_onsubmit = {
-        let navigator = navigator.clone();
         Callback::from(move |workout: WorkoutCreation| {
             spawn_local(async move {
                 let args = to_value(&workout.clone()).expect("Couldn't transform the WorkoutData");
@@ -35,8 +35,8 @@ pub fn create_workout() -> Html {
         <body class="bg-gray-100">
             <div class="container mx-auto py-8">
                 <AddWorkoutForm onsubmit={form_onsubmit}/>
-                <Link<Route> to={Route::Home}><button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded fixed bottom-0 right-0 mb-8 mr-8">{"Add Workout"}</button></Link<Route>>
             </div>
+            <BottomNav on_home_page=false on_exo_page=false />
         </body>
     }
 }
