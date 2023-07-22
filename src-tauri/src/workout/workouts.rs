@@ -74,7 +74,7 @@ pub fn get_workout_by_uuid(
         uuid: workout.uuid,
         title: workout.title,
         work_date: workout.work_date,
-        exercises: exercises,
+        exercises,
     })
 }
 

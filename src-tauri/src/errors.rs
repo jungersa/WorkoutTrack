@@ -38,7 +38,7 @@ pub enum DatabaseError {
 ///
 /// This is used to wrap all errors that can occur when interacting with the filesystem.
 ///  - `CouldNotFindHomeDir`: Could not find tauri home directory:
-#[derive(Error, Debug, PartialEq)]
+#[derive(Error, Debug, PartialEq, Eq)]
 pub enum FilesystemError {
     /// Represents an error that can occur when trying to find the tauri home directory.
     #[error("Could not find tauri home directory")]

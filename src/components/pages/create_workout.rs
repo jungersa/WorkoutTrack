@@ -16,7 +16,7 @@ extern "C" {
 
 #[function_component(CreateWorkout)]
 pub fn create_workout() -> Html {
-    let navigator = use_navigator().unwrap();
+    let navigator = use_navigator().expect("No navigator");
 
     let form_onsubmit = {
         let navigator = navigator.clone();
@@ -27,7 +27,7 @@ pub fn create_workout() -> Html {
                     .await
                     .expect("failed to add workout");
             });
-            navigator.push(&Route::Home)
+            navigator.push(&Route::Home);
         })
     };
 

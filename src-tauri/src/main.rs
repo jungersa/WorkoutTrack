@@ -65,7 +65,6 @@ async fn main() {
         Err(error) => panic!("Problem running migrations: {error:?}",),
     };
 
-
     // Run the Tauri application
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![

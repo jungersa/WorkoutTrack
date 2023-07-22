@@ -8,7 +8,6 @@ use crate::workout;
 
 use chrono::NaiveDateTime;
 
-
 /// Represents a list of workouts.
 #[derive(Serialize, Deserialize)]
 pub struct WorkoutList {

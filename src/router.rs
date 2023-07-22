@@ -3,7 +3,7 @@ use yew_router::prelude::*;
 
 use crate::components::pages::{home::Home, create_workout::CreateWorkout, workout_detail::WorkoutDetail};
 
-#[derive(Clone, Routable, PartialEq)]
+#[derive(Clone, Routable, PartialEq, Eq)]
 pub enum Route {
     #[at("/")]
     Home,

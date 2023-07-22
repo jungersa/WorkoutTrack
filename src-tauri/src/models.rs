@@ -1,4 +1,4 @@
-use super::schema::{workouts, exos};
+use super::schema::{exos, workouts};
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 
@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 /// - universally unique identifier (**`UUID`**): a unique identifier for the workout, regardless of its ID within the system
 /// - **`title`**: the title or name of the workout
 /// - **`work_date`**: the date and time when it was performed
-#[derive(Identifiable, Queryable, Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Identifiable, Queryable, Serialize, Deserialize, PartialEq, Debug, Eq)]
 #[diesel(table_name = workouts)]
 pub struct Workout {
     /// The ID of the workout, uniquely identifying it within a system or database.
@@ -44,7 +44,6 @@ pub struct NewWorkout {
     pub work_date: NaiveDateTime,
 }
 
-
 /// Represents a workout entity, containing information about a specific workout session and the corresponding exercices.
 ///
 /// This struct is used to store details related to a workout,
@@ -70,8 +69,6 @@ pub struct WorkoutUnique {
     // The exercises performed during the workout.
     pub exercises: Vec<Exo>,
 }
-
-
 
 /// Represents a exercise entity, containing information about a specific exercise performed during a workout.
 ///
