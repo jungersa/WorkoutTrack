@@ -1,4 +1,4 @@
-use crate::{types::WorkoutProps, router::Route};
+use crate::{router::Route, types::WorkoutProps};
 use yew::prelude::*;
 use yew_router::prelude::*;
 

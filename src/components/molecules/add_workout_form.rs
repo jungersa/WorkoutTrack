@@ -25,7 +25,7 @@ pub fn add_workout_form(props: &Props) -> Html {
     };
 
     let date_changed = {
-        let state: UseStateHandle<WorkoutCreation> = state.clone();
+        let state = state.clone();
 
         Callback::from(move |date| {
             state.set(WorkoutCreation {
@@ -37,7 +37,6 @@ pub fn add_workout_form(props: &Props) -> Html {
 
     let onsubmit = {
         let form_onsubmit = props.onsubmit.clone();
-        let state: UseStateHandle<WorkoutCreation> = state.clone();
 
         Callback::from(move |event: SubmitEvent| {
             event.prevent_default();

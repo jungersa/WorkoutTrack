@@ -1,11 +1,11 @@
 mod components;
-mod types;
 mod router;
+mod types;
 
 use yew::prelude::*;
 use yew_router::prelude::*;
 
-use crate::router::{Route, switch};
+use crate::router::{switch, Route};
 
 fn main() {
     yew::Renderer::<Main>::new().render();

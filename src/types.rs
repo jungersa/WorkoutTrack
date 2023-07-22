@@ -43,7 +43,7 @@ pub struct Workout {
     pub work_date: NaiveDateTime,
 }
 
-#[derive(Serialize, Deserialize,Clone, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 pub struct WorkoutUnique {
     /// The ID of the workout, uniquely identifying it within a system or database.
     pub id: i32,
@@ -61,7 +61,7 @@ pub struct WorkoutUnique {
     pub exercises: Vec<Exo>,
 }
 
-#[derive(Serialize, Deserialize,Clone, Debug, PartialEq)]
+#[derive(Properties, Serialize, Deserialize, Clone, Debug, PartialEq)]
 pub struct Exo {
     pub id: i32,
     pub uuid: String,
