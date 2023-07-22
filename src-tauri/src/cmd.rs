@@ -125,7 +125,7 @@ pub fn add_workout(title: String, date: &str) -> Result<(), String> {
             return Err("Error creating workout".to_string());
         }
     };
-    return Ok(());
+    Ok(())
 }
 
 /// Get a workout by its uuid from the database.
@@ -146,7 +146,7 @@ pub fn add_workout(title: String, date: &str) -> Result<(), String> {
 ///
 /// The workout is returned if it exists in the database or an error is returned if it does not exist.
 #[tauri::command]
-pub fn get_workout(uuid: String) -> Result<models::WorkoutUnique, String> {
+pub fn get_workout(uuid: &str) -> Result<models::WorkoutUnique, String> {
     let mut connection = match establish_connection() {
         Ok(connection) => connection,
         Err(err) => {
@@ -163,4 +163,24 @@ pub fn get_workout(uuid: String) -> Result<models::WorkoutUnique, String> {
         }
     };
     Ok(workout)
+}
+
+#[tauri::command]
+pub fn delete_workout(uuid: &str) -> Result<(), String> {
+    let mut connection = match establish_connection() {
+        Ok(connection) => connection,
+        Err(err) => {
+            log::error!("Error establishing connection: {err:?}");
+            return Err("Error establishing connection".to_string());
+        }
+    };
+
+    match workout::workouts::delete_workout(&mut connection, &uuid) {
+        Ok(_) => log::info!("Workout Deleted: {uuid:?}"),
+        Err(err) => {
+            log::error!("Error getting workout: {err:?}");
+            return Err("Error getting workout".to_string());
+        }
+    };
+    Ok(())
 }

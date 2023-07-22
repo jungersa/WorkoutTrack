@@ -72,6 +72,7 @@ async fn main() {
             cmd::get_workouts,
             cmd::add_workout,
             cmd::get_workout,
+            cmd::delete_workout
         ])
         .run(tauri::generate_context!())
         .expect("Error while running tauri application");
