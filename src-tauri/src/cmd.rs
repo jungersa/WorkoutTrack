@@ -154,7 +154,7 @@ pub fn get_workout(uuid: &str) -> Result<models::WorkoutUnique, String> {
         }
     };
 
-    let workout = match workout::workouts::get_workout_by_uuid(&mut connection, &uuid) {
+    let workout = match workout::workouts::get_workout_by_uuid(&mut connection, uuid) {
         Ok(workout) => workout,
         Err(err) => {
             log::error!("Error getting workout: {err:?}");
@@ -174,7 +174,7 @@ pub fn delete_workout(uuid: &str) -> Result<(), String> {
         }
     };
 
-    match workout::workouts::delete_workout(&mut connection, &uuid) {
+    match workout::workouts::delete_workout(&mut connection, uuid) {
         Ok(_) => log::info!("Workout Deleted: {uuid:?}"),
         Err(err) => {
             log::error!("Error getting workout: {err:?}");
