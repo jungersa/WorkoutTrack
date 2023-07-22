@@ -1,4 +1,5 @@
-use crate::router::Route;
+use crate::components::molecules::bottom_nav::BottomNav;
+use crate::{router::Route, components::organisms::exo_list::ExoList};
 use crate::types::WorkoutUnique;
 use chrono::NaiveDateTime;
 use serde::Serialize;
@@ -67,17 +68,8 @@ pub fn workout_detail(props: &Props) -> Html {
                     <h1 class="text-2xl font-bold mb-4">{ &workout.title }</h1>
                     <p class="text-gray-600 mb-2">{ "Date: "} { &workout.work_date.format("%c").to_string() }</p>
 
-                    <div class="bg-slate-100 rounded shadow-md p-4">
-                        <h2 class="text-lg font-bold mb-2">{"Exercises"}</h2>
-                        {for workout.exercises.iter().map(|exercise| html! {
-                            <div class="border rounded p-2">
-                                <h3 class="text-md font-semibold mb-2">{ exercise.exopredef_id }</h3>
-                                <p class="mb-1">{"Sets: "} { exercise.reps_rep }</p>
-                                <p class="mb-1">{"Reps: "}{ exercise.reps_exo }</p>
-                                <p class="mb-1">{"Weight: "} { exercise.poids }</p>
-                            </div>
-                        })}
-                    </div>
+                    <ExoList exos={workout.exercises.clone()} />
+
                     <div>
                         <div class="dropdown dropdown-top dropdown-end fixed bottom-0 right-0 mb-20 mr-8">
                             <div>
@@ -87,24 +79,14 @@ pub fn workout_detail(props: &Props) -> Html {
                             <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-slate-100 rounded-box w-52">
                                 <li><a onclick={ondelete}>{"Delete"}</a></li>
                                 <li><Link<Route> to={Route::WorkoutDetail { uuid: workout.uuid.to_string() }}>{"Edit"}</Link<Route>></li>
-                                <li><Link<Route> to={Route::WorkoutDetail { uuid: workout.uuid.to_string() }}>{"Add a Workout"}</Link<Route>></li>
+                                <li><Link<Route> to={Route::CreateExo { uuid: workout.uuid.to_string() }}>{"Add a Workout"}</Link<Route>></li>
                             </ul>
                             </div>
                         </div>
                      </div>
 
                 </div>
-                <div class="btm-nav bg-slate-50">
-                    <Link<Route> to={Route::Home}>
-                    <button>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-                    </button></Link<Route>>
-                    <button>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
-                    </button>
-                </div>
-
-
+                <BottomNav on_home_page=false on_exo_page=false />
             </body>
         }
 }
