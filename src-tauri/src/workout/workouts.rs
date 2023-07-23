@@ -145,14 +145,14 @@ mod tests {
     use super::*;
     use crate::schema::workouts;
     use chrono::NaiveDateTime;
-    use diesel::{insert_into, prelude::*, result::Error as DieselError, sqlite::SqliteConnection};
+    use diesel::sqlite::SqliteConnection;
     use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 
     pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!("./migrations");
 
     // Helper function to establish an in-memory SQLite connection for testing
     fn establish_connection() -> SqliteConnection {
-        let mut connection = SqliteConnection::establish(":memory:").unwrap();
+        let mut connection = SqliteConnection::establish(":memory:").expect("Error connecting");
         connection
             .run_pending_migrations(MIGRATIONS)
             .expect("Error migrating");
@@ -174,7 +174,10 @@ mod tests {
         assert_eq!(create_workout(connection, &new_workout), Ok(()));
 
         // Perform assertions to verify that the workout is created in the database as expected
-        let workout_count: i64 = workouts::table.count().get_result(connection).unwrap();
+        let workout_count: i64 = workouts::table
+            .count()
+            .get_result(connection)
+            .expect("Error");
         assert_eq!(workout_count, 1);
     }
 
@@ -191,7 +194,7 @@ mod tests {
         diesel::insert_into(workouts::table)
             .values(&workout1)
             .execute(connection)
-            .unwrap();
+            .expect("Error inserting workout1");
 
         let workout2 = models::NewWorkout {
             uuid: "uuid2".to_string(),
@@ -201,10 +204,10 @@ mod tests {
         diesel::insert_into(workouts::table)
             .values(&workout2)
             .execute(connection)
-            .unwrap();
+            .expect("Error inserting workout2");
 
         // Call the get_workouts function and expect a vector of Workout instances
-        let result = get_workouts(connection).unwrap();
+        let result = get_workouts(connection).expect("Error getting workouts");
 
         // Perform assertions to verify the correctness of the returned workouts
         assert_eq!(result.len(), 2);

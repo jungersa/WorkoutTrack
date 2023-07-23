@@ -3,7 +3,6 @@ use serde::Serialize;
 use wasm_bindgen::prelude::*;
 use yew::prelude::*;
 
-
 #[wasm_bindgen]
 extern "C" {
     #[wasm_bindgen(js_namespace = ["window", "__TAURI__", "tauri"], catch)]
@@ -16,7 +15,7 @@ pub struct Props {
 }
 
 #[function_component(CreateExo)]
-pub fn create_exo(props: &Props) -> Html {
+pub fn create_exo(_props: &Props) -> Html {
     html! {
         <body class="item-center">
 
