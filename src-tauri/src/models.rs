@@ -1,4 +1,4 @@
-use super::schema::{exos, workouts};
+use super::schema::{exopredefs, exos, workouts};
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 
@@ -77,8 +77,9 @@ pub struct WorkoutUnique {
 /// - universally unique identifier (**`UUID`**): a unique identifier for the exercise, regardless of its ID within the system
 /// - **`reps_rep`**: the number of sets performed
 /// - **`reps_exo`**: the number of reps performed per set
-/// - **`poids`**: the weight used$
+/// - **`poids`**: the weight used
 /// - **`exopredef_id`**: the ID of the predefined exercise
+/// - **`workout_id`**: the ID of the workout
 #[derive(Identifiable, Queryable, Associations, Serialize, Deserialize, Debug)]
 #[diesel(belongs_to(Workout))]
 #[diesel(table_name = exos)]
@@ -90,4 +91,38 @@ pub struct Exo {
     pub poids: Option<f64>,
     pub exopredef_id: i32,
     pub workout_id: i32,
+}
+
+/// Represents data to create a new exercise entity.
+///
+/// This struct is used to create a new exercise,
+/// - universally unique identifier (**`UUID`**): a unique identifier for the exercise, regardless of its ID within the system
+/// - **`reps_rep`**: the number of sets performed
+/// - **`reps_exo`**: the number of reps performed per set
+/// - **`poids`**: the weight used
+/// - **`exopredef_id`**: the ID of the predefined exercise
+/// - **`workout_id`**: the ID of the workout
+#[derive(Insertable, Serialize, Deserialize, Debug)]
+#[diesel(table_name = exos)]
+pub struct NewExo {
+    pub uuid: String,
+    pub reps_rep: f64, //sets
+    pub reps_exo: f64, //reps
+    pub poids: Option<f64>,
+    pub exopredef_id: i32,
+    pub workout_id: i32,
+}
+
+/// Represents a predefined exercise entity, containing information about a specific exercise.
+///
+/// This struct is used to store details related to a predefined exercise,
+/// - **`ID`**: the ID of the predefined exercise, uniquely identifying it within a system or database
+/// - universally unique identifier (**`UUID`**): a unique identifier for the predefined exercise, regardless of its ID within the system
+/// - **`name`**: the name of the predefined exercise
+#[derive(Identifiable, Queryable, Serialize, Deserialize, Debug)]
+#[diesel(table_name = exopredefs)]
+pub struct ExoPredef {
+    pub id: i32,
+    pub uuid: String,
+    pub name: String,
 }

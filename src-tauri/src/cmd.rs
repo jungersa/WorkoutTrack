@@ -183,3 +183,80 @@ pub fn delete_workout(uuid: &str) -> Result<(), String> {
     };
     Ok(())
 }
+
+#[tauri::command]
+pub fn get_exercices(id: i32) -> Result<Vec<models::Exo>, String> {
+    let mut connection = match establish_connection() {
+        Ok(connection) => connection,
+        Err(err) => {
+            log::error!("Error establishing connection: {err:?}");
+            return Err("Error establishing connection".to_string());
+        }
+    };
+
+    let exercices = match workout::exercises::get_exercices(&mut connection, id) {
+        Ok(exercices) => exercices,
+        Err(err) => {
+            log::error!("Error getting exercices: {err:?}");
+            return Err("Error getting exercices".to_string());
+        }
+    };
+    Ok(exercices)
+}
+
+#[tauri::command]
+pub fn add_exercice(
+    reps_rep: f64,
+    reps_exo: f64,
+    poids: Option<f64>,
+    exopredef_id: i32,
+    workout_id: i32,
+) -> Result<(), String> {
+    let exo_uuid = Uuid::new_v4().hyphenated().to_string();
+
+    let mut connection = match establish_connection() {
+        Ok(connection) => connection,
+        Err(err) => {
+            log::error!("Error establishing connection: {err:?}");
+            return Err("Error establishing connection".to_string());
+        }
+    };
+
+    let new_exercice = models::NewExo {
+        uuid: exo_uuid,
+        reps_rep,
+        reps_exo,
+        poids,
+        exopredef_id,
+        workout_id,
+    };
+
+    match workout::exercises::create_exercice(&mut connection, &new_exercice) {
+        Ok(_) => log::info!("Exercice Created: {new_exercice:?}"),
+        Err(err) => {
+            log::error!("Error creating exercice: {err:?}");
+            return Err("Error creating exercice".to_string());
+        }
+    };
+    Ok(())
+}
+
+#[tauri::command]
+pub fn get_predefined_exercices() -> Result<Vec<models::ExoPredef>, String> {
+    let mut connection = match establish_connection() {
+        Ok(connection) => connection,
+        Err(err) => {
+            log::error!("Error establishing connection: {err:?}");
+            return Err("Error establishing connection".to_string());
+        }
+    };
+
+    let exercices = match workout::exercises::get_predefined_exercices(&mut connection) {
+        Ok(exercices) => exercices,
+        Err(err) => {
+            log::error!("Error getting exercices: {err:?}");
+            return Err("Error getting exercices".to_string());
+        }
+    };
+    Ok(exercices)
+}

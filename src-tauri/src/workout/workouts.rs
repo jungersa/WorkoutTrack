@@ -1,7 +1,7 @@
 use diesel::prelude::*;
 
 use crate::errors::{DatabaseError, Error};
-use crate::models::{self, Exo, WorkoutUnique};
+use crate::models;
 use crate::schema;
 
 /// Get all the workouts in the database
@@ -65,11 +65,11 @@ pub fn get_workout_by_uuid(
         .first::<models::Workout>(connection)
         .map_err(|err| Error::DatabaseError(DatabaseError::QueryError(err)))?;
 
-    let exercises = Exo::belonging_to(&workout)
+    let exercises = models::Exo::belonging_to(&workout)
         .load(connection)
         .map_err(|err| Error::DatabaseError(DatabaseError::QueryError(err)))?;
 
-    Ok(WorkoutUnique {
+    Ok(models::WorkoutUnique {
         id: workout.id,
         uuid: workout.uuid,
         title: workout.title,
