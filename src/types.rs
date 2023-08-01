@@ -77,7 +77,7 @@ pub struct Exo {
     pub workout_id: i32,
 }
 
-#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq, Default)]
 pub struct PredefExo {
     pub id: i32,
     pub uuid: String,

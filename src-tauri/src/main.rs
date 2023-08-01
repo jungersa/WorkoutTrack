@@ -74,6 +74,7 @@ async fn main() {
             cmd::delete_workout,
             cmd::get_exercices,
             cmd::get_predefined_exercices,
+            cmd::get_predefined_exercice,
             cmd::add_exercice,
         ])
         .run(tauri::generate_context!())

@@ -270,3 +270,26 @@ pub fn get_predefined_exercices() -> Result<PredefexoList, String> {
     };
     Ok(PredefexoList { predefexos })
 }
+
+#[tauri::command]
+pub fn get_predefined_exercice(id: i32) -> Result<models::ExoPredef, String> {
+    let mut connection = match establish_connection() {
+        Ok(connection) => connection,
+        Err(err) => {
+            log::error!("Error establishing connection: {err:?}");
+            return Err("Error establishing connection".to_string());
+        }
+    };
+
+    let predefexo = match workout::exercises::get_predefined_exercice(&mut connection, id) {
+        Ok(exercices) => {
+            log::info!("Exercices: {exercices:?}");
+            exercices
+        }
+        Err(err) => {
+            log::error!("Error getting exercices: {err:?}");
+            return Err("Error getting exercices".to_string());
+        }
+    };
+    Ok(predefexo)
+}

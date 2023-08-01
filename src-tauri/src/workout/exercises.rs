@@ -100,3 +100,15 @@ pub fn get_predefined_exercices(
         .load::<models::ExoPredef>(connection)
         .map_err(|err| Error::DatabaseError(DatabaseError::QueryError(err)))
 }
+
+pub(crate) fn get_predefined_exercice(
+    connection: &mut diesel::SqliteConnection,
+    id: i32,
+) -> Result<models::ExoPredef, Error> {
+    use crate::schema::exopredefs::dsl::exopredefs;
+
+    exopredefs
+        .filter(schema::exopredefs::id.eq(id))
+        .first::<models::ExoPredef>(connection)
+        .map_err(|err| Error::DatabaseError(DatabaseError::QueryError(err)))
+}
