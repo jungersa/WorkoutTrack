@@ -1,5 +1,5 @@
 use crate::{
-    components::molecules::{bottom_nav::BottomNav, exo::Exo},
+    components::molecules::bottom_nav::BottomNav,
     router::Route,
     types::{ExoCreation, PredefExo, PredefExoVec},
 };
@@ -27,7 +27,7 @@ pub struct Props {
 #[function_component(CreateExo)]
 pub fn create_exo(props: &Props) -> Html {
     let navigator = use_navigator().expect("No navigator");
-    let predefexos: UseStateHandle<Vec<PredefExo>> = use_state_eq(|| vec![]);
+    let predefexos: UseStateHandle<Vec<PredefExo>> = use_state_eq(Vec::new);
     let state: UseStateHandle<ExoCreation> = use_state(|| ExoCreation {
         workoutId: props.workout_id,
         ..ExoCreation::default()

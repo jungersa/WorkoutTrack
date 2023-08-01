@@ -19,7 +19,7 @@ pub fn workout(props: &ExoType) -> Html {
         let props = props.clone();
         spawn_local(async move {
             let args = to_value(&ApiCall {
-                id: props.exopredef_id.clone(),
+                id: props.exopredef_id,
             })
             .expect("Couldn't transform the ApiCall to JsValue");
             let predefexo_data = invoke("get_predefined_exercice", args)

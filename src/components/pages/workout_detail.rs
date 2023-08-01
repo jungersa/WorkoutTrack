@@ -36,7 +36,7 @@ pub fn workout_detail(props: &Props) -> Html {
         let props = props.clone();
         spawn_local(async move {
             let args = to_value(&ApiCall {
-                id: props.workout_id.clone(),
+                id: props.workout_id,
             })
             .expect("Couldn't transform the WorkoutData");
             let workout_data = invoke("get_workout", args)

@@ -5,7 +5,7 @@ use crate::components::pages::{
     create_exo::CreateExo, create_workout::CreateWorkout, home::Home, workout_detail::WorkoutDetail,
 };
 
-#[derive(Clone, Routable, PartialEq, Eq)]
+#[derive(Clone, Copy, Routable, PartialEq, Eq)]
 pub enum Route {
     #[at("/")]
     Home,

@@ -101,7 +101,7 @@ pub fn get_predefined_exercices(
         .map_err(|err| Error::DatabaseError(DatabaseError::QueryError(err)))
 }
 
-pub(crate) fn get_predefined_exercice(
+pub fn get_predefined_exercice(
     connection: &mut diesel::SqliteConnection,
     id: i32,
 ) -> Result<models::ExoPredef, Error> {
