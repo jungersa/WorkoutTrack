@@ -2,6 +2,11 @@ use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 use yew::{html, AttrValue, Properties};
 
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
+pub struct ApiCall {
+    pub id: i32,
+}
+
 #[derive(Properties, PartialEq, Clone, Debug, Eq)]
 pub struct WorkoutProps {
     pub id: i32,
@@ -82,4 +87,13 @@ pub struct PredefExo {
 #[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
 pub struct PredefExoVec {
     pub predefexos: Vec<PredefExo>,
+}
+
+#[derive(Clone, Default, Serialize, Deserialize, Debug)]
+pub struct ExoCreation {
+    pub repsRep: f64, //sets
+    pub repsExo: f64, //reps
+    pub poids: Option<f64>,
+    pub exopredefId: i32,
+    pub workoutId: i32,
 }

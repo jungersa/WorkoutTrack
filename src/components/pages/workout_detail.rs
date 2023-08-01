@@ -1,5 +1,5 @@
 use crate::components::molecules::bottom_nav::BottomNav;
-use crate::types::WorkoutUnique;
+use crate::types::{ApiCall, WorkoutUnique};
 use crate::{components::organisms::exo_list::ExoList, router::Route};
 use chrono::NaiveDateTime;
 use serde::Serialize;
@@ -17,7 +17,7 @@ extern "C" {
 
 #[derive(Properties, Serialize, PartialEq, Clone, Debug, Eq)]
 pub struct Props {
-    pub uuid: String,
+    pub workout_id: i32,
 }
 
 #[function_component(WorkoutDetail)]
@@ -35,7 +35,10 @@ pub fn workout_detail(props: &Props) -> Html {
         let workout = workout.clone();
         let props = props.clone();
         spawn_local(async move {
-            let args = to_value(&props.clone()).expect("Couldn't transform the WorkoutData");
+            let args = to_value(&ApiCall {
+                id: props.workout_id.clone(),
+            })
+            .expect("Couldn't transform the WorkoutData");
             let workout_data = invoke("get_workout", args)
                 .await
                 .expect("failed to get workouts");
@@ -77,8 +80,8 @@ pub fn workout_detail(props: &Props) -> Html {
                         </label>
                         <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-slate-100 rounded-box w-52">
                             <li><a onclick={ondelete}>{"Delete"}</a></li>
-                            <li><Link<Route> to={Route::WorkoutDetail { uuid: workout.uuid.to_string() }}>{"Edit"}</Link<Route>></li>
-                            <li><Link<Route> to={Route::CreateExo { uuid: workout.uuid.to_string() }}>{"Add an exercice"}</Link<Route>></li>
+                            <li><Link<Route> to={Route::WorkoutDetail { workout_id: workout.id }}>{"Edit"}</Link<Route>></li>
+                            <li><Link<Route> to={Route::CreateExo { workout_id: workout.id }}>{"Add an exercice"}</Link<Route>></li>
                         </ul>
                         </div>
                     </div>

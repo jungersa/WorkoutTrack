@@ -11,10 +11,10 @@ pub enum Route {
     Home,
     #[at("/create_workout")]
     CreateWorkout,
-    #[at("/workout/:uuid")]
-    WorkoutDetail { uuid: String },
-    #[at("/workout/create_exo/:uuid")]
-    CreateExo { uuid: String },
+    #[at("/workout/:workout_id")]
+    WorkoutDetail { workout_id: i32 },
+    #[at("/workout/create_exo/:workout_id")]
+    CreateExo { workout_id: i32 },
     #[not_found]
     #[at("/404")]
     NotFound,
@@ -24,11 +24,11 @@ pub fn switch(route: Route) -> Html {
     match route {
         Route::Home => html! { <Home /> },
         Route::CreateWorkout => html! { <CreateWorkout /> },
-        Route::WorkoutDetail { uuid } => {
-            html! {<WorkoutDetail { uuid }/>}
+        Route::WorkoutDetail { workout_id } => {
+            html! {<WorkoutDetail { workout_id }/>}
         }
-        Route::CreateExo { uuid } => {
-            html! {<CreateExo { uuid }/>}
+        Route::CreateExo { workout_id } => {
+            html! {<CreateExo { workout_id }/>}
         }
         Route::NotFound => html! { <h1>{ "404" }</h1> },
     }

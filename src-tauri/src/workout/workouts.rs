@@ -56,12 +56,12 @@ pub fn get_workouts(
 ///
 /// The workout is returned as a `Workout` struct.
 ///
-pub fn get_workout_by_uuid(
+pub fn get_workout(
     connection: &mut diesel::SqliteConnection,
-    uuid: &str,
+    id: i32,
 ) -> Result<models::WorkoutUnique, Error> {
     let workout: models::Workout = schema::workouts::dsl::workouts
-        .filter(schema::workouts::uuid.eq(uuid))
+        .filter(schema::workouts::id.eq(id))
         .first::<models::Workout>(connection)
         .map_err(|err| Error::DatabaseError(DatabaseError::QueryError(err)))?;
 
@@ -133,8 +133,8 @@ pub fn create_workout(
 /// A workout with the given uuid must exist in the database.
 /// The connection to the database must be established.
 ///
-pub fn delete_workout(connection: &mut diesel::SqliteConnection, uuid: &str) -> Result<(), Error> {
-    diesel::delete(schema::workouts::dsl::workouts.filter(schema::workouts::uuid.eq(uuid)))
+pub fn delete_workout(connection: &mut diesel::SqliteConnection, id: i32) -> Result<(), Error> {
+    diesel::delete(schema::workouts::dsl::workouts.filter(schema::workouts::id.eq(id)))
         .execute(connection)
         .map(|_| ())
         .map_err(|err| Error::DatabaseError(DatabaseError::QueryError(err)))
