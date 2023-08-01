@@ -4119,6 +4119,7 @@ name = "workout-track-ui"
 version = "0.0.0"
 dependencies = [
  "chrono",
+ "gloo-console",
  "js-sys",
  "serde",
  "serde-wasm-bindgen",
