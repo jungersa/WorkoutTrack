@@ -71,3 +71,15 @@ pub struct Exo {
     pub exopredef_id: i32,
     pub workout_id: i32,
 }
+
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
+pub struct PredefExo {
+    pub id: i32,
+    pub uuid: String,
+    pub name: String,
+}
+
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
+pub struct PredefExoVec {
+    pub predefexos: Vec<PredefExo>,
+}

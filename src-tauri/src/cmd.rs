@@ -241,8 +241,15 @@ pub fn add_exercice(
     Ok(())
 }
 
+/// Represents a list of workouts.
+#[derive(Serialize, Deserialize)]
+pub struct PredefexoList {
+    /// The list of workouts.
+    predefexos: Vec<models::ExoPredef>,
+}
+
 #[tauri::command]
-pub fn get_predefined_exercices() -> Result<Vec<models::ExoPredef>, String> {
+pub fn get_predefined_exercices() -> Result<PredefexoList, String> {
     let mut connection = match establish_connection() {
         Ok(connection) => connection,
         Err(err) => {
@@ -251,12 +258,15 @@ pub fn get_predefined_exercices() -> Result<Vec<models::ExoPredef>, String> {
         }
     };
 
-    let exercices = match workout::exercises::get_predefined_exercices(&mut connection) {
-        Ok(exercices) => exercices,
+    let predefexos = match workout::exercises::get_predefined_exercices(&mut connection) {
+        Ok(exercices) => {
+            log::info!("Exercices: {exercices:?}");
+            exercices
+        }
         Err(err) => {
             log::error!("Error getting exercices: {err:?}");
             return Err("Error getting exercices".to_string());
         }
     };
-    Ok(exercices)
+    Ok(PredefexoList { predefexos })
 }
