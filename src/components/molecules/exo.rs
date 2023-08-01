@@ -21,13 +21,13 @@ pub fn workout(props: &ExoType) -> Html {
             let args = to_value(&ApiCall {
                 id: props.exopredef_id.clone(),
             })
-            .expect("Couldn't transform the WorkoutData");
+            .expect("Couldn't transform the ApiCall to JsValue");
             let predefexo_data = invoke("get_predefined_exercice", args)
                 .await
-                .expect("failed to get workouts");
+                .expect("failed to get predefexo");
 
             let predefexo_data: PredefExo =
-                from_value(predefexo_data).expect("Couldn't transform the WorkoutUnique");
+                from_value(predefexo_data).expect("Couldn't transform the data to PredefExo");
             predefexo.set(predefexo_data);
         });
     };

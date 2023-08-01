@@ -9,6 +9,7 @@ use serde_wasm_bindgen::{from_value, to_value};
 use wasm_bindgen::prelude::*;
 use wasm_bindgen_futures::spawn_local;
 use web_sys::HtmlInputElement;
+use web_sys::HtmlSelectElement;
 use yew::prelude::*;
 use yew_router::prelude::*;
 
@@ -116,11 +117,14 @@ pub fn create_exo(props: &Props) -> Html {
 
     let exopredef_changed = {
         Callback::from(move |event: Event| {
-            let input = event.target_dyn_into::<HtmlInputElement>();
+            let input = event.target_dyn_into::<HtmlSelectElement>();
 
             if let Some(input) = input {
+                let input = input.value();
+                log!("exopredef_changed {:?}", &input);
+
                 state.set(ExoCreation {
-                    exopredefId: input.value().parse().expect("Couldn't parse the reps_rep"),
+                    exopredefId: input.parse().expect("Couldn't parse the reps_rep"),
                     ..(*state).clone()
                 });
             }
