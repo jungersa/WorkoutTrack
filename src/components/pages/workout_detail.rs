@@ -78,7 +78,7 @@ pub fn workout_detail(props: &Props) -> Html {
                         <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-slate-100 rounded-box w-52">
                             <li><a onclick={ondelete}>{"Delete"}</a></li>
                             <li><Link<Route> to={Route::WorkoutDetail { uuid: workout.uuid.to_string() }}>{"Edit"}</Link<Route>></li>
-                            <li><Link<Route> to={Route::CreateExo { uuid: workout.uuid.to_string() }}>{"Add a Workout"}</Link<Route>></li>
+                            <li><Link<Route> to={Route::CreateExo { uuid: workout.uuid.to_string() }}>{"Add an exercice"}</Link<Route>></li>
                         </ul>
                         </div>
                     </div>
